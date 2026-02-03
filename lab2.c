@@ -1,7 +1,7 @@
 /*
  ============================================================================
  Name        : Lab2.c
- Author      : Austin Tian
+ Author      : Jonathan Sobers
  Version     :
  Copyright   : Copyright 2020
  Description : Signed number and unsigned numbers, Ansi-style
@@ -61,28 +61,39 @@ int main(void) {
             } 
         }while (1);
 }
-//Option 1 convert binary to signed
+
+// Option 1: Convert 8-bit binary string to signed decimal
 void convert_binary_to_signed(const char *binary)
 {
-    int value = 0;
-    // Converting an 8-bit binary string to integer using for loop
+    int value = 0; //Takes a base value of 0 until entered
+
+    // Basic for loop to increment value entered
     for (int i = 0; i < 8; i++) {
         value = value * 2 + (binary[i] - '0');
     }
-    // If MSB is 1, interpret as negative
+
+    // Apply two's complement if Most Significant Bit is 1 
     if (binary[0] == '1') {
-        value -= 256;  // 2^8
+        value -= 256;  // Subtract 2 to the power of 8 to get signed value
     }
+
+    // Display results
     printf("Signed decimal value: %d\n", value);
 }
-//Option 2 convert binary to float
+
+// Option 2: Convert 32-bit binary string to floating-point value
 void convert_binary_to_float(const char *binary) {
+    // Extract sign bit (0 = positive, 1 = negative)
     int sign = binary[0] - '0';
+
+    //  For loop to increment again but this time it extracts exponent bits then removes the bias
     int exponent = 0;
     for (int i = 1; i <= 8; i++) {
         exponent = exponent * 2 + (binary[i] - '0');
     }
     exponent -= 127;
+
+    // This part I reference w3 schools mantissa topic due to not knowing specifics of mantissa
     float mantissa = 1.0f;
     float factor = 0.5f;
     for (int i = 9; i < 32; i++) {
@@ -91,6 +102,10 @@ void convert_binary_to_float(const char *binary) {
         }
         factor /= 2.0f;
     }
+
+    // After running the above I believe you combine sign, mantissa, and exponent to get the final float value
     float result = (sign ? -1.0f : 1.0f) * mantissa * powf(2.0f, exponent);
+
+    // Print results
     printf("Floating-point value: %f\n", result);
 }
